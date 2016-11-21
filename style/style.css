@@ -1,3 +1,7 @@
 body{
-    background-color: black !important
+    background-color: lightgray !important
+}
+
+form a {
+    margin-left : 5px;
 }

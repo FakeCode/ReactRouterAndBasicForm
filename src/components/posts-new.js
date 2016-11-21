@@ -1,12 +1,28 @@
-import React, { Component} from 'react';
+import React, { Component, PropTypes} from 'react';
 import {reduxForm} from 'redux-form';
 import {createPost} from '../actions/index';
+import {Link} from 'react-router';
 
 class PostsNew extends Component{
-    render() {
+
+static contextTypes = {
+    router: PropTypes.object
+};
+
+onSubmit(props){
+    this.props.createPost(props)
+        .then(() =>
+        {
+            //navigate by calling this.context.router.push
+            this.context.router.push('/');
+        });
+}
+
+
+render() {
 const {fields: {title, categories, content}, handleSubmit} = this.props;
         return(
-        <form onSubmit={handleSubmit(this.props.createPost)}>
+        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
             <h3>Create A New Post</h3>
             <div className={`form-group ${title.touched && title.error ? 'has-danger' : ''}`}>
                 <label>Title</label>
@@ -15,16 +31,17 @@ const {fields: {title, categories, content}, handleSubmit} = this.props;
                 {title.touched ? title.error : ''}
                 </div>
             </div>
-            <div className="form-group">
+            <div className={`form-group ${categories.touched && categories.error ? 'has-danger' : ''}`}>
             <label>Category</label>
             <input type="text" className="form-control" {...categories}/>
             {categories.touched ? categories.error : ''}
             </div>
-            <div className="form-group">
+            <div className="form-group ">
             <label>Content</label>
             <input type="text" className="form-control" {...content}/>
             </div>
-            <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">Submit</button>
+                <Link to="/" className="btn btn-danger">Cancel</Link>
         </form>
         );
     }
